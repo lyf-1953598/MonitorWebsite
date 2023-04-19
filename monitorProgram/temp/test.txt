@@ -1,0 +1,116 @@
+    const datasetWithFilters = [];
+    const seriesList = [];
+    //数据分组
+    // 按第二列进行分组，得到三维数组
+    var groups = curtestdata.reduce((acc, cur) => {
+        const key = cur[3];
+        if (!acc[key]) {
+            acc[key] = [];
+        }
+        acc[key].push(cur);
+        return acc;
+    }, {});
+    var result = Object.values(groups);
+    //表头分离
+    var firstLine = result.shift();
+    firstLine[0].push("动态回撤");
+    console.log(firstLine);
+    console.log(result);
+    // 时间筛选
+    result = filterDataByTime(result, startTime, endTime);
+    console.log(result);
+    //计算初始净值和动态回撤
+    for (let i = 0; i < result.length; i++) {
+        let curValue;
+        let netValue = [];
+        let cur, max;
+        let mmd;
+        for (let j = 0; j < result[i].length; j++) {
+            if (j == 0) {
+                
+                curValue = parseFloat(result[i][j][11]) + 1;
+                // console.log(result[i][j][11]);
+            }
+            else {
+                curValue = curValue * (parseFloat(result[i][j][11]) + 1);
+            }
+            // 进行净值临时存储
+            // 添加进一个临时数组中
+            netValue.push(curValue);
+
+
+        }
+        //净值计算正常
+        // console.log(netValue);
+        for (let j = 0; j < result[i].length; j++) {
+            if (j == 0) {
+                //第一个初始值
+                max = netValue[j];
+            } else {
+                if (netValue[j] > max) {
+                    max = netValue[j];
+                }
+            }
+            cur = netValue[j];
+            //动态回撤计算
+            mmd = (max-cur)/max;
+            //计算完成后放入数组
+            // console.log(mmd);
+            // console.log(result[i][j]);
+            result[i][j].push(mmd);
+
+        }
+    }
+    console.log(result);
+    //将三维数组解放为二维数组，添加表头
+    // var flattenedArr = result.flat(2); // 将三维数组变成二维数组
+    // console.log(flattenedArr);
+    var newDataArr = [];
+    for(let i=0;i < result.length;i++){
+        for(let j =0;j<result[i].length;j++){
+            newDataArr.push(result[i][j]);
+        }
+    }
+     //动态回撤回收完成
+    newDataArr.unshift(firstLine[0]);
+    console.log(newDataArr);
+    
+    //数据传入
+    echarts.util.each(strategies, function (strategy) {
+        var datasetId = 'dataset_' + strategy;
+        datasetWithFilters.push({
+            id: datasetId,
+            fromDatasetId: 'newDataArr',
+            transform: {
+                type: 'filter',
+                config: {
+                    and: [
+                        // 修改区间
+                        { dimension: '策略', '=': strategy }
+                    ]
+                }
+            }
+        });
+        // console.log(datasetWithFilters);
+        seriesList.push({
+            type: 'line',
+            datasetId: datasetId,
+            showSymbol: false,
+            name: strategy,
+            // 调整折现字体的显示
+            labelLayout: {
+                moveOverlap: 'shiftY'
+            },
+            emphasis: {
+                focus: 'series'
+            },
+            encode: {
+                x: '日期',
+                y: '动态回撤',
+                label: ['策略', '动态回撤'],
+                itemName: '日期',
+                tooltip: ['Test', '动态回撤']
+            }
+        });
+        // console.log(seriesList);
+    });

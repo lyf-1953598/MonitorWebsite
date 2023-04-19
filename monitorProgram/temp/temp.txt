@@ -1,0 +1,316 @@
+console.log(curtestdata);
+const datasetWithFilters = [];
+const seriesList = [];
+const startTime = '2023-03-01';
+const endTime = time.toLocaleDateString();
+// 在此处做数据处理和筛选对齐
+echarts.util.each(strategies, function (strategy) {
+    var datasetId = 'dataset_' + strategy;
+    datasetWithFilters.push({
+        id: datasetId,
+        fromDatasetId: 'curtestdata',
+        transform: {
+            type: 'filter',
+            config: {
+                and: [
+                    // 修改区间
+                    { dimension: '日期',
+                     '>=':startTime,
+                     '<=': endTime,
+                     parser: 'time' },
+                    { dimension: '策略', '=': strategy }
+                ]
+            }
+        }
+    });
+    seriesList.push({
+        type: 'line',
+        datasetId: datasetId,
+        showSymbol: false,
+        name: strategy,
+        endLabel: {
+            // show: true,
+            formatter: function (params) {
+                console.log(params);
+                return params.value[3] + ': ' + params.value[11];
+            }
+        },
+        // 调整折现字体的显示
+        labelLayout: {
+            moveOverlap: 'shiftY'
+        },
+        emphasis: {
+            focus: 'series'
+        },
+        encode: {
+            x: '日期',
+            y: '当日收益率',
+            label: ['策略', '当日收益率'],
+            itemName: '日期',
+            tooltip: ['Test']
+        }
+    });
+});
+option = {
+    animationDuration: 1000,
+    dataset: [
+        {
+            id: 'curtestdata',
+            source: curtestdata
+        },
+        ...datasetWithFilters
+    ],
+    legend: {
+        orient: 'vertical',
+        type: 'scroll',
+        right: 0,
+        top: 'center'
+    },
+    title: {
+        text: '原型开发-折线图表测试',
+        textStyle: {
+            fontSize: 28
+        }
+    },
+    tooltip: {
+        order: 'valueDesc',
+        trigger: 'axis'
+    },
+    toolbox: {
+        show: true,
+        feature: {
+            dataZoom: {
+                yAxisIndex: 'none'
+            },
+            dataView: { readOnly: false },
+            magicType: { type: ['line', 'bar'] },
+            restore: {},
+            saveAsImage: {}
+        }
+    },
+    xAxis: {
+        type: 'time',
+        nameLocation: 'middle'
+    },
+    yAxis: {
+        // name: '当日收益率',
+        // nameTextStyle:{
+        //     fontSize:20,    
+        // }
+    },
+
+    dataZoom: [
+        {
+            textStyle: {
+                color: '#8392A5'
+            },
+            dataBackground: {
+                areaStyle: {
+                    color: '#8392A5'
+                },
+                lineStyle: {
+                    opacity: 0.8,
+                    color: '#8392A5'
+                }
+            },
+            brushSelect: true
+        },
+        {
+            type: 'inside'
+        }
+    ],
+    grid: {
+        right: 140
+    },
+    series: seriesList
+};
+myChart.setOption(option);
+
+
+option && myChart.setOption(option);
+
+
+//问题1 时间筛选后计算动态回撤
+    //先做时间筛选
+    const datasetWithFilters = [];
+    const seriesList = [];
+    echarts.util.each(strategies, function (strategy) {
+        var datasetId = 'dataset_' + strategy;
+        datasetWithFilters.push({
+            id: datasetId,
+            fromDatasetId: 'curtestdata',
+            transform: {
+                type: 'filter',
+                config: {
+                    and: [
+                        // 修改区间
+                        {
+                            dimension: '日期',
+                            '>=': startTime,
+                            '<=': endTime,
+                            parser: 'time'
+                        },
+                        { dimension: '策略', '=': strategy }
+                    ]
+                }
+            }
+        });
+        // console.log(datasetWithFilters);
+        seriesList.push({
+            type: 'line',
+            datasetId: datasetId,
+            showSymbol: false,
+            name: strategy,
+            endLabel: {
+                // show: true,
+                formatter: function (params) {
+
+                    return params.value[3] + ': ' + params.value[11];
+                }
+            },
+            // 调整折现字体的显示
+            labelLayout: {
+                moveOverlap: 'shiftY'
+            },
+            emphasis: {
+                focus: 'series'
+            },
+            encode: {
+                x: '日期',
+                y: '当日收益率',
+                label: ['策略', '当日收益率'],
+                itemName: '日期',
+                tooltip: ['Test', '当日收益率']
+            }
+        });
+        // console.log(seriesList);
+    });
+    var option = {
+        animationDuration: 1000,
+        dataset: [
+            {
+                id: 'curtestdata',
+                source: curtestdata
+            },
+            ...datasetWithFilters
+        ],
+        legend: {
+            orient: 'vertical',
+            type: 'scroll',
+            right: 0,
+            top: 'center'
+        },
+        title: {
+            text: '原型开发-折线图表测试',
+            textStyle: {
+                fontSize: 28,
+                textAlign: 'center',
+            },
+            left: '40%'
+        },
+        tooltip: {
+            order: 'valueDesc',
+            trigger: 'axis'
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                dataView: { readOnly: false },
+                magicType: { type: ['line', 'bar'] },
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'time',
+            // name: '时间',
+            nameLocation: 'middle',
+            axisPointer: {
+                // 绑定折线图的数据
+                link: [{ xAxisIndex: 'all' }],
+            }
+        },
+        yAxis: {
+            // name: '当日收益率',
+            // nameTextStyle:{
+            //     fontSize:20,    
+            // }
+        },
+        dataZoom: [
+            {
+                textStyle: {
+                    color: '#8392A5'
+                },
+                dataBackground: {
+                    areaStyle: {
+                        color: '#8392A5'
+                    },
+                    lineStyle: {
+                        opacity: 0.8,
+                        color: '#8392A5'
+                    }
+                },
+                brushSelect: true
+            },
+            {
+                type: 'inside'
+            }
+        ],
+        grid: {
+            right: 140
+        },
+        series: seriesList
+    };
+
+    // let chartDom = document.getElementById('main');
+    chartDDMDom.removeAttribute("_echarts_instance_");
+    // const myChart = echarts.init(chartDom);
+
+    myChartDDM.setOption(option, true);
+    let temp = myChartDDM.getOption();
+    let seriesData = temp.series;
+    console.log(seriesData);
+    console.log(myChartDDM);
+
+    //问题2 滑动之后计算动态回撤
+    console.log(curtestdata);
+    //数据处理，按策略分类
+    const groups = curtestdata.reduce((acc, cur) => {
+        const key = cur[3];
+        if (!acc[key]) {
+            acc[key] = [];
+        }
+        acc[key].push(cur);
+        return acc;
+    }, {});
+    const result = Object.values(groups);
+    //表头分离
+    var firstLine = result[0].shift();
+    firstLine.push("最大回撤");
+    console.log(firstLine);
+    console.log(result);
+
+    // //最大回撤按组计算
+    // for(let i=1;i<result.length;i++){
+    //     let min,max;
+    //     for(let j=0;j<result[i].length;j++){
+    //         if(j==0){
+    //             min = result[i][j][11];
+    //             max = result[i][j][11];
+    //         }
+    //         else{
+    //             if(result[i][j][11]>max){
+    //                 max = result[i][j][11];
+    //             }
+    //             if(result[i][j][11]<min){
+    //                 min = result[i][j][11];
+    //             }
+    //         }
+    //         //  进行最大回撤计算
+
+    //         // 添加进一个临时数组中
+    //     }
+    // }

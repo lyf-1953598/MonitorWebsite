@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Tabulator Example</title>
+	<link href="https://unpkg.com/tabulator-tables@4.9.3/dist/css/tabulator.min.css" rel="stylesheet">
+	<script src="https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.min.js"></script>
+	<script src="https://oss.sheetjs.com/sheetjs/xlsx.full.min.js"></script>
+</head>
+<body>
+	<div id="example-table"></div>
+	<!-- <button onclick="exportToExcel()">Export to Excel</button> -->
+
+	<script>
+		var tableData = [
+			{ category: "Fruit", name: "Apple", today: 5, week: 20, twoWeeks: 40, month: 80 },
+			{ category: "Fruit", name: "Banana", today: 10, week: 30, twoWeeks: 50, month: 90 },
+			{ category: "Vegetable", name: "Carrot", today: 15, week: 40, twoWeeks: 60, month: 100 },
+			{ category: "Vegetable", name: "Broccoli", today: 20, week: 50, twoWeeks: 70, month: 110 },
+			{ category: "Meat", name: "Beef", today: 25, week: 60, twoWeeks: 80, month: 120 },
+			{ category: "Meat", name: "Chicken", today: 30, week: 70, twoWeeks: 90, month: 130 },
+		];
+
+		var table = new Tabulator("#example-table", {
+			data: tableData,
+			height: "100%",
+			layout: "fitColumns",
+			columns: [
+				{ title: "Category", field: "category", headerVertical: true, headerVerticalHeight: "auto", formatter: "textarea", cellClick: mergeCell },
+				{ title: "Name", field: "name", headerVertical: true, headerVerticalHeight: "auto", formatter: "textarea" },
+				{ title: "Today", field: "today" },
+				{ title: "Week", field: "week" },
+				{ title: "Two Weeks", field: "twoWeeks" },
+				{ title: "Month", field: "month" }
+			],
+			dataTree: true,
+			dataTreeStartExpanded: true,
+			dataTreeElementColumn: "name",
+			dataTreeChildIndent: 10
+		});
+
+		function mergeCell(e, cell) {
+			var column = cell.getColumn().getField();
+			if (column == "category") {
+				var category = cell.getValue();
+				var rowsToMerge = [];
+				table.getRows().forEach(function (row) {
+					if (row.getData().category == category) {
+						rowsToMerge.push(row);
+					}
+				});
+				table.rowManager.mergeCells(rowsToMerge);
+			}
+		}
+
+	

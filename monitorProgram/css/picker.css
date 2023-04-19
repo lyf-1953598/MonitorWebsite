@@ -1,0 +1,45 @@
+.wrap{
+    line-height: 40px;
+    height: 40px;
+    border: 1px solid #dcdfe6;
+    width: 300px;
+    /* margin: 40px auto 0; */
+    display: flex;
+    transition: border-color .2s;
+    border-radius: 4px;
+}
+.wrap:hover{
+    border-color: #c0c4cc;
+}
+.wrap:active{
+    border-color: #66b1ff;
+}
+.wrap.active{
+    border-color: #66b1ff;
+}
+.wrap > div{
+    flex: 1;
+    padding: 0 10px;
+    display: flex;
+    cursor: pointer;
+}
+.wrap .ali-iconfont{
+    display: inline-block;
+    width: 20px;
+    text-align: center;
+    margin-right: 5px;
+}
+.wrap-l-starTime, .wrap-l-endTime{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.wrap [name="startTime"], .wrap [name="endTime"]{
+    flex: 1;
+    width: 100%;
+}
+.wrap [name="startTime"], .wrap [name="endTime"], .wrap [name="startTime"]:focus, .wrap [name="endTime"]:focus{
+    border: none;
+    outline: none;
+    cursor: pointer;
+}

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>ECharts</title>
+  <!-- 引入刚刚下载的 ECharts 文件 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.2/echarts.min.js"></script>
+  <!-- 引入SheetJS库 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
+  <link rel="stylesheet" href="https://at.alicdn.com/t/font_2431045_hbwl3x53oep.css">
+  <link rel="stylesheet" href="./css/index.css">
+  <link rel="stylesheet" href="./css/picker.css">
+  <link rel="stylesheet" href="./css/main.css">
+</head>
+
+<body>
+  <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+  <!-- 定义按钮,调用封装函数 -->
+  <input type="file" id="fileInput" onchange="handleFile(event)">
+
+
+
+  <div class="chartcontainer">
+    <div class="wrap-container">
+      <div class="wrap hide">
+        <div class="wrap-l">
+          <i class="ali-iconfont ali-iconshizhong"></i>
+          <div class="wrap-l-starTime">
+            <input name="startTime" type="text" placeholder="开始日期">
+          </div>
+
+        </div>
+        <div class="wrap-r">
+          <i class="ali-iconfont ali-iconshizhong"></i>
+          <div class="wrap-l-endTime">
+            <input name="endTime" type="text" placeholder="结束日期">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="main" style="width: 1200px;height:600px;"></div>
+  </div>
+  <div class="chartcontainer">
+    <div id="lineMain" style="width: 1200px;height:600px;"></div>
+  </div>
+  <div class="chartcontainer">
+    <div id="lineDDM" style="width: 1200px;height:600px;"></div>
+  </div>
+  <!-- 表格呈现 -->
+  <div class="gridcontainer">
+    <div id="myGrid" class="ag-theme-alpine" style="height: 600px;width: 100%;">
+  </div>
+  </div>
+  <div class="gridcontainer">
+    <div id="myGridAnother" class="ag-theme-alpine" style="height: 600px;width: 100%;">
+    </div>
+  </div>
+  <script src="https://s1.pstatp.com/cdn/expire-1-M/jquery/1.10.2/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@29.2.0/dist/ag-grid-community.min.js"></script>
+  <script src="./js/moment.js"></script>
+  <script src="./js/jquery-datePicker.min.js"></script>
+  <script src="./js/chartdata.js"></script>
+
+</body>
+
+</html>
